@@ -5,11 +5,7 @@
         "emitDecoratorMetadata": true,
         "module": "commonjs",
         "moduleResolution": "node",
-        "rootDir": "./src",
-        "outDir": "./build",
+        "outDir": "./test/build",
         "importHelpers": true
-    },
-    "include": [
-        "./src/**/*"
-    ]
+    }
 }
