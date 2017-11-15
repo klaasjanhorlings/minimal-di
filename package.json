@@ -2,7 +2,7 @@
   "name": "minimal-di",
   "version": "1.0.0",
   "description": "",
-  "main": "build/src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "pretest": "tsc -p tsconfig.test.json",
     "test": "mocha ./test/build/test/ --recursive",
@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "files": [
-    "build/src/**/*.js"
+    "build/**/*.js"
   ],
   "dependencies": {
     "reflect-metadata": "^0.1.10"
