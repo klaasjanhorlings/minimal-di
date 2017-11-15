@@ -13,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "files": [
-    "build/**/*.js"
+    "build/**/*.js",
+    "src/**/*.ts",
+    "test/**/*.ts"
   ],
   "dependencies": {
     "reflect-metadata": "^0.1.10"
