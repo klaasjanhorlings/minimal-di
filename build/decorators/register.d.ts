@@ -5,4 +5,4 @@ import { IContainer } from "../container";
  * @param container The container used to register this dependency on. Defaults to DefaultContainer.
  * @param isSingleton If true the same instance is object is returned every time. Defaults to false.
  */
-export declare const register: (identifier: string, container?: IContainer, isSingleton?: boolean) => (constructor: Function) => void;
+export declare const register: (identifier: string, container?: IContainer | undefined, isSingleton?: boolean | undefined) => (constructor: Function) => void;

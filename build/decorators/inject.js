@@ -10,10 +10,9 @@ exports.inject = (container) => (
 // tslint:disable-next-line:no-any
 (constructor) => (class extends constructor {
     // tslint:disable-next-line:no-any
-    constructor(...args) {
+    constructor(...ctorArgs) {
         container = container || container_1.DefaultContainer.getInstance();
         const metadata = dependency_metadata_1.DependencyMetadata.fromObject(constructor);
-        const ctorArgs = Array.prototype.slice.call(arguments, 0);
         if (typeof metadata !== "undefined") {
             metadata.methods.forEach((dependencies, methodName) => {
                 if (methodName === "constructor") {
@@ -37,7 +36,9 @@ exports.inject = (container) => (
         }
     }
 }));
-const resolveDependencies = (dependencies, dest, container) => {
+const resolveDependencies = (dependencies, 
+    // tslint:disable-next-line:no-any
+    dest, container) => {
     dependencies.forEach((dependencyRef, index) => {
         dest[index] = (typeof dest[index] !== "undefined") ? dest[index] : container.get(dependencyRef);
     });

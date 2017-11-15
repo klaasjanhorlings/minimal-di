@@ -84,4 +84,5 @@ const createObjectInstance = (definition) => {
     else if (definition.factory !== void (0)) {
         return definition.factory();
     }
+    throw new Error("Definition object should either contain a ctor or factory property, neither found.");
 };

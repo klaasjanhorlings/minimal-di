@@ -7,25 +7,24 @@ import { DependencyMetadata } from "../dependency-metadata";
  */
 export const inject = (container?: IContainer) => (
     // tslint:disable-next-line:no-any
-    <T extends { new(...args: any[]): any }>(constructor: T) => (
+    <TClass extends { new(...args: any[]): any }>(constructor: TClass) => (
         class extends constructor {
             // tslint:disable-next-line:no-any
-            public constructor(...args: any[]) {
+            public constructor(...ctorArgs: any[]) {
                 container = container || DefaultContainer.getInstance();
 
                 const metadata = DependencyMetadata.fromObject(constructor);
-                const ctorArgs = Array.prototype.slice.call(arguments, 0);
 
                 if (typeof metadata !== "undefined") {
                     metadata.methods.forEach((dependencies, methodName) => {
                         if (methodName === "constructor") {
-                            resolveDependencies(dependencies, ctorArgs, container);
+                            resolveDependencies(dependencies, ctorArgs, container as IContainer);
                         } else {
                             // tslint:disable-next-line:ban-types
                             const method = constructor.prototype[methodName] as Function;
-                            const wrapper = function() {
+                            const wrapper = function(this: TClass) {
                                 const methodArgs = Array.prototype.slice.call(arguments, 0);
-                                resolveDependencies(dependencies, methodArgs, container);
+                                resolveDependencies(dependencies, methodArgs, container as IContainer);
                                 method.apply(this, methodArgs);
                             };
                             constructor.prototype[methodName] = wrapper;
@@ -43,7 +42,12 @@ export const inject = (container?: IContainer) => (
     )
 );
 
-const resolveDependencies = (dependencies: Map<number | string, string>, dest: {}, container: IContainer) => {
+const resolveDependencies = (
+        dependencies: Map<number | string, string>,
+        // tslint:disable-next-line:no-any
+        dest: { [key: number]: any; [key: string]: any },
+        container: IContainer,
+    ) => {
     dependencies.forEach((dependencyRef, index) => {
         dest[index] = (typeof dest[index] !== "undefined") ? dest[index] : container.get(dependencyRef);
     });

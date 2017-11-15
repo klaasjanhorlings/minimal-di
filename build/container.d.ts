@@ -1,6 +1,6 @@
 export interface IContainer {
-    registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): any;
-    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean): any;
+    registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): void;
+    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean): void;
     get<TDependency>(identifier: string): TDependency;
 }
 export declare class DefaultContainer implements IContainer {

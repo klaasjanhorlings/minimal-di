@@ -1,6 +1,6 @@
 export interface IContainer {
-    registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean);
-    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean);
+    registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): void;
+    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean): void;
     get<TDependency>(identifier: string): TDependency;
 }
 
@@ -17,7 +17,7 @@ interface DependencyDefinition<TDependency> {
 }
 
 export class DefaultContainer implements IContainer {
-    private readonly initStack = [];
+    private readonly initStack: string[] = [];
     private readonly definitions = new Map<string, DependencyDefinition<{}>>();
     private static instance: IContainer;
 
@@ -110,4 +110,5 @@ const createObjectInstance = <TDependency>(definition: DependencyDefinition<TDep
     } else if (definition.factory !== void(0)) {
         return definition.factory();
     }
+    throw new Error("Definition object should either contain a ctor or factory property, neither found.");
 };
