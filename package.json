@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "pretest": "tsc -p tsconfig.test.json",
     "test": "mocha ./test/build/test/ --recursive",
