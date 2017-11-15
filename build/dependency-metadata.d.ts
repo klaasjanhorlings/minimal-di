@@ -1,6 +1,6 @@
 import "reflect-metadata";
 export declare const metadataKey = "dependencies";
-export default class DependencyMetadata {
+export declare class DependencyMetadata {
     static fromObject(target: object): DependencyMetadata;
     properties: Map<string, string>;
     methods: Map<string, Map<number, string>>;

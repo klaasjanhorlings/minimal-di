@@ -1,29 +1,29 @@
-import "mocha";
 import { expect } from "chai";
-import DependencyMetadata from "../src/dependency-metadata";
+import "mocha";
+import { DependencyMetadata } from "../src/dependency-metadata";
 
 describe("DependencyMetadata", function() {
     let metadata: DependencyMetadata;
     beforeEach(function() {
         metadata = new DependencyMetadata();
-    })
-    
+    });
+
     describe("addConstructorParameter()", function() {
         it("should create a new entry named \"constructor\" in the methods map", function() {
-            // act
+            // Act
             metadata.addConstructorParameter(0, "dependencyName");
 
-            // assert
+            // Assert
             expect(metadata.methods).
                 to.have.key("constructor");
         });
 
         it("should add the dependencies at the expected index", function() {
-            // act
+            // Act
             metadata.addConstructorParameter(0, "firstDependencyName");
             metadata.addConstructorParameter(3, "secondDependencyName");
 
-            // assert
+            // Assert
             const ctorEntries = metadata.methods.get("constructor");
             expect(ctorEntries.get(0)).
                 to.be.equal("firstDependencyName");
@@ -34,20 +34,20 @@ describe("DependencyMetadata", function() {
 
     describe("addMethodParameter()", function() {
         it("should create a new entry in the methods map", function() {
-            // act
+            // Act
             metadata.addMethodParameter("methodName", 0, "dependencyName");
 
-            // assert
+            // Assert
             expect(metadata.methods).
                 to.have.key("methodName");
         });
 
         it("should add the dependencies at the expected index", function() {
-            // act
+            // Act
             metadata.addMethodParameter("methodName", 0, "firstDependencyName");
             metadata.addMethodParameter("methodName", 3, "secondDependencyName");
 
-            // assert
+            // Assert
             const ctorEntries = metadata.methods.get("methodName");
             expect(ctorEntries.get(0)).
                 to.be.equal("firstDependencyName");
@@ -58,10 +58,10 @@ describe("DependencyMetadata", function() {
 
     describe("addProperty()", function() {
         it("should create a new entry in the methods map with the passed value", function() {
-            // act
+            // Act
             metadata.addProperty("propertyName", "dependencyName");
 
-            // assert
+            // Assert
             expect(metadata.properties).
                 to.be.have.key("propertyName");
             expect(metadata.properties.get("propertyName")).
@@ -71,15 +71,15 @@ describe("DependencyMetadata", function() {
 
     describe("store() and load()", function() {
         it("should retrieve the same object as is stored", function() {
-            // arrange
+            // Arrange
             metadata.addConstructorParameter(1, "firstDependencyName");
             metadata.addProperty("propertyName", "secondDependencyName");
             const target = {};
 
-            // store
+            // Act
             metadata.store(target);
 
-            // assert
+            // Assert
             expect(DependencyMetadata.fromObject(target)).
                 to.be.equal(metadata);
         });

@@ -1,41 +1,42 @@
-import "mocha";
 import { expect } from "chai";
-import DependencyMetadata from "../../src/dependency-metadata";
+import "mocha";
 import { DefaultContainer } from "../../src/container";
 import { dependency } from "../../src/decorators/dependency";
+import { DependencyMetadata } from "../../src/dependency-metadata";
 
 describe("@dependency decorator", function() {
     describe("PropertyDecorator", function() {
         it("should create and store a new DependencyMetadata object when first encountered", function() {
-            // arrange
+            // Arrange
             const target = {};
 
-            // act
+            // Act
             dependency("dependencyName")(target, "propertyName");
 
-            // assert
+            // Assert
             const metadata = DependencyMetadata.fromObject(target);
+            // tslint:disable-next-line:no-unused-expression
             expect(metadata).
-                to.not.be.undefined;
+                to.not.be.equal(undefined);
             expect(metadata.properties).
                 to.have.key("propertyName");
             expect(metadata.properties.get("propertyName")).
                 to.be.equal("dependencyName");
         });
     });
-    
+
     describe("ConstructorParameterDecorator", function() {
         it("should create and store a new DependencyMetadata object when first encountered", function() {
-            // arrange
+            // Arrange
             const target = {};
-            
-            // act
+
+            // Act
             dependency("dependencyName")(target, undefined, 0);
 
-            // assert
+            // Assert
             const metadata = DependencyMetadata.fromObject(target);
             expect(metadata).
-                to.not.be.undefined;
+                to.not.be.equal(undefined);
             expect(metadata.methods).
                 to.have.key("constructor");
             expect(metadata.methods.get("constructor").get(0)).
@@ -43,14 +44,14 @@ describe("@dependency decorator", function() {
         });
 
         it("should support multiple dependencies per method", function() {
-            // arrange
+            // Arrange
             const target = {};
 
-            // act
+            // Act
             dependency("dependencyName")(target, undefined, 0);
             dependency("altDependency")(target, undefined, 3);
 
-            // assert
+            // Assert
             const metadata = DependencyMetadata.fromObject(target);
             expect(metadata.methods.get("constructor").get(0)).
                 to.be.equal("dependencyName");
@@ -61,16 +62,16 @@ describe("@dependency decorator", function() {
 
     describe("MethodParameterDecorator", function() {
         it("should create and store a new DependencyMetadata object when first encountered", function() {
-            // arrange
+            // Arrange
             const target = {};
-            
-            // act
+
+            // Act
             dependency("dependencyName")(target, "methodName", 0);
 
-            // assert
+            // Assert
             const metadata = DependencyMetadata.fromObject(target);
             expect(metadata).
-                to.not.be.undefined;
+                to.not.be.equal(undefined);
             expect(metadata.methods).
                 to.have.key("methodName");
             expect(metadata.methods.get("methodName").get(0)).
@@ -78,14 +79,14 @@ describe("@dependency decorator", function() {
         });
 
         it("should support multiple dependencies per method", function() {
-            // arrange
+            // Arrange
             const target = {};
 
-            // act
+            // Act
             dependency("dependencyName")(target, "methodName", 0);
             dependency("altDependency")(target, "methodName", 3);
 
-            // assert
+            // Assert
             const metadata = DependencyMetadata.fromObject(target);
             expect(metadata.methods.get("methodName").get(0)).
                 to.be.equal("dependencyName");

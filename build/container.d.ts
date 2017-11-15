@@ -1,6 +1,6 @@
 export interface IContainer {
     registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): any;
-    registerFactory(identifier: string, get: () => any, isSingleton?: boolean): any;
+    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean): any;
     get<TDependency>(identifier: string): TDependency;
 }
 export declare class DefaultContainer implements IContainer {
@@ -30,9 +30,7 @@ export declare class DefaultContainer implements IContainer {
      * @param factory Callback to return an object instance for this dependency.
      * @param isSingleton Always return the same instance? Defaults to false.
      */
-    registerFactory(identifier: string, factory: () => any, isSingleton?: boolean): void;
+    registerFactory<TDependency>(identifier: string, factory: () => TDependency, isSingleton?: boolean): void;
     get<TDependency>(identifier: string): TDependency;
-    private getObjectInstance(definition);
-    private createObjectInstance(definition);
     private throwOnLoop(identifier);
 }

@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 export const metadataKey = "dependencies";
 
-export default class DependencyMetadata {
+export class DependencyMetadata {
     public static fromObject(target: object): DependencyMetadata {
         return Reflect.getMetadata(metadataKey, target);
     }

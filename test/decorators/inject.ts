@@ -1,94 +1,101 @@
-import "mocha";
 import { expect } from "chai";
-import { inject } from "../../src/decorators/inject";
+import "mocha";
 import { spy } from "sinon";
 import { DefaultContainer } from "../../src/container";
 import { dependency } from "../../src/decorators/dependency";
+import { inject } from "../../src/decorators/inject";
+
+/* tslint:disable:max-classes-per-file */
 
 class MockBase {
-    constructor(...args: any[]) {
+    // tslint:disable-next-line:no-any
+    public constructor(...args: any[]) {
         watch.constructor.apply(this, arguments);
     }
 
-    testMethod(...args: any[]) {
+    // tslint:disable-next-line:no-any
+    public testMethod(...args: any[]) {
         watch.testMethod.apply(this, arguments);
+
+        return "test";
     }
-};
+}
 
 const watch = {
     constructor: spy(),
-    testMethod: spy()
+    testMethod: spy(),
 };
 
-describe(`@inject decorator`, function() {
+describe("@inject decorator", function() {
     beforeEach(function() {
-        for (let key in watch) {
+        // tslint:disable-next-line:forin
+        for (const key in watch) {
             watch[key].reset();
         }
-        DefaultContainer.setInstance(null);
-    })
+        DefaultContainer.setInstance(undefined);
+    });
 
-    describe(`constructor`, function() {
+    describe("constructor", function() {
         it("should call the parent constructor and return an instance of the parent object", function() {
-            // arrange
+            // Arrange
             class Mock extends MockBase {}
-            
-            // act
+
+            // Act
             const injectedMock = inject()(Mock);
             const instance = new injectedMock();
 
-            // assert
+            // Assert
             expect(instance).
                 to.be.instanceof(Mock);
             expect(watch.constructor.callCount).
-                to.be.equal(1)
+                to.be.equal(1);
         });
 
         it("should pass any arguments to the parent constructor", function() {
-            // arrange
+            // Arrange
             class Mock extends MockBase {}
 
-            // act
+            // Act
             const injectedMock = inject()(Mock);
             const instance = new injectedMock(1, 2, 3);
-            
-            // assert
+
+            // Assert
             expect(watch.constructor.firstCall.args).
                 to.be.deep.equal([1, 2, 3]);
         });
 
         it("should replace dependency constructor parameters if not provided", function() {
-            // arrange
+            // Arrange
             class Mock extends MockBase {}
             DefaultContainer.getInstance().registerFactory("dependencyA", () => "injectionA");
             DefaultContainer.getInstance().registerFactory("dependencyB", () => "injectionB");
             dependency("dependencyA")(Mock, undefined, 0);
             dependency("dependencyB")(Mock, undefined, 1);
-            
-            // act
+
+            // Act
             const injectedMock = inject()(Mock);
             const instance = new injectedMock("paramA");
 
-            // assert
+            // Assert
             expect(watch.constructor.firstCall.args).
                 to.be.deep.equal(["paramA", "injectionB"]);
         });
     });
 
-    describe(`properties`, function() {
+    describe("properties", function() {
         it("should inject dependency properties on creation", function() {
-            // arrange
+            // Arrange
             class Mock extends MockBase {}
             DefaultContainer.getInstance().registerFactory("dependencyA", () => "injectionA");
             DefaultContainer.getInstance().registerFactory("dependencyB", () => "injectionB");
             dependency("dependencyA")(Mock, "propertyA");
             dependency("dependencyB")(Mock, "propertyB");
 
-            // act
+            // Act
             const injectedMock = inject()(Mock);
             const instance = new injectedMock();
-            
-            // assert
+
+            // Assert
             expect(instance).
                 to.have.property("propertyA", "injectionA");
             expect(instance).
@@ -96,37 +103,50 @@ describe(`@inject decorator`, function() {
         });
     });
 
-    describe(`methods`, function() {
+    describe("methods", function() {
         it("should call and pass any arguments to the parent method", function() {
-            // arrange
+            // Arrange
             class Mock extends MockBase {}
             const injectedMock = inject()(Mock);
 
-            // act
+            // Act
             const instance = new injectedMock();
             instance.testMethod(1, 2, 3);
-            
-            // assert
+
+            // Assert
             expect(watch.testMethod.firstCall.args).
                 to.be.deep.equal([1, 2, 3]);
         });
 
         it("should replace dependency method parameters if not provided", function() {
-            // arrange
+            // Arrange
             class Mock extends MockBase {}
             DefaultContainer.getInstance().registerFactory("dependencyA", () => "injectionA");
             DefaultContainer.getInstance().registerFactory("dependencyB", () => "injectionB");
             dependency("dependencyA")(Mock, "testMethod", 0);
             dependency("dependencyB")(Mock, "testMethod", 1);
 
-            // act
+            // Act
             const injectedMock = inject()(Mock);
             const instance = new injectedMock();
             instance.testMethod("paramA");
 
-            // assert
+            // Assert
             expect(watch.testMethod.firstCall.args).
                 to.be.deep.equal(["paramA", "injectionB"]);
         });
+
+        it("should return the return value of the wrapped method", function() {
+            // Arrange
+            class Mock extends MockBase {}
+
+            // Act
+            const injectedMock = inject()(Mock);
+            const instance = new injectedMock();
+
+            // Assert
+            expect(instance.testMethod("paramA", "paramB")).
+                to.be.equal("test");
+        });
     });
-})
+});

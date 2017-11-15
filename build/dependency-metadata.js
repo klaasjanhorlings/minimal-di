@@ -25,4 +25,4 @@ class DependencyMetadata {
         this.properties.set(propertyName, dependency);
     }
 }
-exports.default = DependencyMetadata;
+exports.DependencyMetadata = DependencyMetadata;

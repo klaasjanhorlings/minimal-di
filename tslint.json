@@ -1,8 +1,16 @@
 {
-    "extends": "tslint:recommended",
+    "extends": "tslint:all",
     "rules": {
         "max-line-length": {
-            "options": [150]
-        }
+            "options": [120]
+        },
+        "linebreak-style": false,
+        "typedef": false,
+        "member-ordering": false,
+        "interface-name": false,
+        "no-import-side-effect": false,
+        "only-arrow-functions": false,
+        "no-magic-numbers": false,
+        "no-parameter-properties": false
     }
 }

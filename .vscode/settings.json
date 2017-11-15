@@ -7,5 +7,6 @@
         "src/**/*.js.map": { "when": "$(basename)" },
         "test/**/*.js": { "when": "$(basename).ts" },
         "test/**/*.js.map": { "when": "$(basename)" }
-    }
+    },
+    "editor.rulers": [100, 120]
 }

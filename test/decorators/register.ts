@@ -1,10 +1,12 @@
-import "mocha";
 import { expect } from "chai";
+import "mocha";
 import { stub } from "sinon";
-import { DefaultContainer } from "../../src/container"
-import { register } from "../../src/decorators/register";;
+import { DefaultContainer } from "../../src/container";
+import { register } from "../../src/decorators/register";
 
-class MockContainer extends DefaultContainer {};
+/* tslint:disable:max-classes-per-file */
+
+class MockContainer extends DefaultContainer {}
 const registerStub = stub(MockContainer.prototype, "registerConstructor");
 const getStub = stub(MockContainer.prototype, "get");
 class Mock {}
@@ -17,35 +19,35 @@ describe("@register decorator", function() {
     });
 
     after(function() {
-        DefaultContainer.setInstance(null);
+        DefaultContainer.setInstance(undefined);
     });
 
     it("should register on the DefaultContainer if no container argument is passed", function() {
-        // act
+        // Act
         register("dependencyName")(Mock);
 
-        // assert
+        // Assert
         expect(registerStub.callCount).
             to.be.equal(1);
     });
 
     it("should register on the passed container if passed", function() {
-        // arrange
+        // Arrange
         const container = new MockContainer();
 
-        // act
+        // Act
         register("dependencyName", container)(Mock);
 
-        // assert
+        // Assert
         expect(registerStub.firstCall.thisValue).
             to.be.equal(container);
     });
 
     it("should pass a get method that returns a new instance of the registered class", function() {
-        // act
+        // Act
         register("dependencyName")(Mock);
 
-        // assert
+        // Assert
         const factory = registerStub.firstCall.args[1];
         expect(factory).
             to.be.instanceof(Function);

@@ -26,9 +26,9 @@ class DefaultContainer {
      */
     registerConstructor(identifier, constructor, isSingleton) {
         this.definitions.set(identifier, {
-            identifier,
             ctor: constructor,
-            isSingleton: !!isSingleton
+            identifier,
+            isSingleton: !!isSingleton,
         });
     }
     /**
@@ -43,9 +43,9 @@ class DefaultContainer {
      */
     registerFactory(identifier, factory, isSingleton) {
         this.definitions.set(identifier, {
-            identifier,
             factory,
-            isSingleton: !!isSingleton
+            identifier,
+            isSingleton: !!isSingleton,
         });
     }
     get(identifier) {
@@ -55,33 +55,33 @@ class DefaultContainer {
         this.throwOnLoop(identifier);
         const definition = this.definitions.get(identifier);
         this.initStack.push(identifier);
-        const instance = this.getObjectInstance(definition);
+        const instance = getObjectInstance(definition);
         this.initStack.pop();
         return instance;
-    }
-    getObjectInstance(definition) {
-        if (definition.isSingleton) {
-            if (definition.instance === void (0)) {
-                definition.instance = this.createObjectInstance(definition);
-            }
-            return definition.instance;
-        }
-        return this.createObjectInstance(definition);
-    }
-    createObjectInstance(definition) {
-        if (definition.ctor !== void (0)) {
-            return new definition.ctor;
-        }
-        else if (definition.factory !== void (0)) {
-            return definition.factory();
-        }
     }
     throwOnLoop(identifier) {
         const idx = this.initStack.indexOf(identifier);
         if (idx >= 0) {
-            const route = this.initStack.map(depName => depName === identifier ? `[${depName}]` : depName).join(" -> ");
+            const route = this.initStack.map((depName) => depName === identifier ? `[${depName}]` : depName).join(" -> ");
             throw new Error(`Loop detected, ${identifier} (indirectly) depends on itself ${route} -> [${identifier}]`);
         }
     }
 }
 exports.DefaultContainer = DefaultContainer;
+const getObjectInstance = (definition) => {
+    if (definition.isSingleton) {
+        if (definition.instance === void (0)) {
+            definition.instance = createObjectInstance(definition);
+        }
+        return definition.instance;
+    }
+    return createObjectInstance(definition);
+};
+const createObjectInstance = (definition) => {
+    if (definition.ctor !== void (0)) {
+        return new definition.ctor();
+    }
+    else if (definition.factory !== void (0)) {
+        return definition.factory();
+    }
+};

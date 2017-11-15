@@ -1,4 +1,4 @@
-import { IContainer, DefaultContainer } from "../container";
+import { DefaultContainer, IContainer } from "../container";
 
 /**
  * Register this class as a dependency solution.
@@ -7,8 +7,9 @@ import { IContainer, DefaultContainer } from "../container";
  * @param isSingleton If true the same instance is object is returned every time. Defaults to false.
  */
 export const register = (identifier: string, container?: IContainer, isSingleton?: boolean) => (
+    // tslint:disable-next-line:ban-types
     (constructor: Function) => {
         container = container || DefaultContainer.getInstance();
         container.registerConstructor(identifier, constructor as FunctionConstructor, isSingleton);
     }
-)
+);

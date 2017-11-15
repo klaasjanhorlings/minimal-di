@@ -1,14 +1,16 @@
-import { IContainer, DefaultContainer } from "../container";
-import DependencyMetadata from "../dependency-metadata";
+import { DefaultContainer, IContainer } from "../container";
+import { DependencyMetadata } from "../dependency-metadata";
 
 /**
  * Notifies that the class has dependencies. Wraps the constructor in an automatically resolving wrapper.
  * @param container The container used to resolve dependencies for this. Defaults to DefaultContainer.
  */
 export const inject = (container?: IContainer) => (
+    // tslint:disable-next-line:no-any
     <T extends { new(...args: any[]): any }>(constructor: T) => (
         class extends constructor {
-            constructor(...args: any[]) {
+            // tslint:disable-next-line:no-any
+            public constructor(...args: any[]) {
                 container = container || DefaultContainer.getInstance();
 
                 const metadata = DependencyMetadata.fromObject(constructor);
@@ -19,11 +21,12 @@ export const inject = (container?: IContainer) => (
                         if (methodName === "constructor") {
                             resolveDependencies(dependencies, ctorArgs, container);
                         } else {
+                            // tslint:disable-next-line:ban-types
                             const method = constructor.prototype[methodName] as Function;
                             const wrapper = function() {
-                                const args = Array.prototype.slice.call(arguments, 0);
-                                resolveDependencies(dependencies, args, container);
-                                method.apply(this, args);
+                                const methodArgs = Array.prototype.slice.call(arguments, 0);
+                                resolveDependencies(dependencies, methodArgs, container);
+                                method.apply(this, methodArgs);
                             };
                             constructor.prototype[methodName] = wrapper;
                         }
@@ -31,7 +34,7 @@ export const inject = (container?: IContainer) => (
                 }
 
                 super(...ctorArgs);
-                
+
                 if (typeof metadata !== "undefined") {
                     resolveDependencies(metadata.properties, this, container);
                 }
@@ -40,8 +43,8 @@ export const inject = (container?: IContainer) => (
     )
 );
 
-const resolveDependencies = (dependencies: Map<number | string, string>, dest: any, container: IContainer) => {
+const resolveDependencies = (dependencies: Map<number | string, string>, dest: {}, container: IContainer) => {
     dependencies.forEach((dependencyRef, index) => {
         dest[index] = (typeof dest[index] !== "undefined") ? dest[index] : container.get(dependencyRef);
     });
-}
+};
