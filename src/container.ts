@@ -18,10 +18,10 @@ interface DependencyDefinition<TDependency> {
 
 export class DefaultContainer implements IContainer {
     private readonly initStack: string[] = [];
-    private readonly definitions = new Map<string, DependencyDefinition<{}>>();
+    private readonly definitions: Map<string, DependencyDefinition<{}>> = new Map();
     private static instance: IContainer;
 
-    public static getInstance() {
+    static getInstance(): IContainer {
         if (!DefaultContainer.instance) {
             DefaultContainer.instance = new DefaultContainer();
         }
@@ -29,7 +29,7 @@ export class DefaultContainer implements IContainer {
         return DefaultContainer.instance;
     }
 
-    public static setInstance(instance: IContainer) {
+    static setInstance(instance: IContainer): void {
         DefaultContainer.instance = instance;
     }
 
@@ -43,7 +43,7 @@ export class DefaultContainer implements IContainer {
      * @param constructor The constructor function or class to be created and returned.
      * @param isSingleton Always return the same instance? Defaults to false.
      */
-    public registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean) {
+    registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): void {
         this.definitions.set(identifier, {
             ctor: constructor,
             identifier,
@@ -61,7 +61,7 @@ export class DefaultContainer implements IContainer {
      * @param factory Callback to return an object instance for this dependency.
      * @param isSingleton Always return the same instance? Defaults to false.
      */
-    public registerFactory<TDependency>(identifier: string, factory: () => TDependency, isSingleton?: boolean) {
+    registerFactory<TDependency>(identifier: string, factory: () => TDependency, isSingleton?: boolean): void {
         this.definitions.set(identifier, {
             factory,
             identifier,
@@ -69,7 +69,7 @@ export class DefaultContainer implements IContainer {
         });
     }
 
-    public get<TDependency>(identifier: string): TDependency {
+    get<TDependency>(identifier: string): TDependency {
         if (!this.definitions.has(identifier)) {
             throw new Error(`Unknown dependency "${identifier}"`);
         }
@@ -82,7 +82,7 @@ export class DefaultContainer implements IContainer {
         return instance;
     }
 
-    private throwOnLoop(identifier: string) {
+    private throwOnLoop(identifier: string): void {
         const idx = this.initStack.indexOf(identifier);
         if (idx >= 0) {
             const route = this.initStack.map((depName) =>

@@ -3,28 +3,28 @@ import "reflect-metadata";
 export const metadataKey = "dependencies";
 
 export class DependencyMetadata {
-    public static fromObject(target: object): DependencyMetadata {
+    static fromObject(target: object): DependencyMetadata {
         return Reflect.getMetadata(metadataKey, target);
     }
 
-    public properties: Map<string, string> = new Map();
-    public methods: Map<string, Map<number, string>> = new Map();
+    properties: Map<string, string> = new Map();
+    methods: Map<string, Map<number, string>> = new Map();
 
-    public store(target: object) {
+    store(target: object): void {
         Reflect.defineMetadata(metadataKey, this, target);
     }
 
-    public addConstructorParameter(parameterIndex: number, dependency: string) {
+    addConstructorParameter(parameterIndex: number, dependency: string): void {
         this.addMethodParameter("constructor", parameterIndex, dependency);
     }
 
-    public addMethodParameter(methodName: string, parameterIndex: number, dependency: string) {
+    addMethodParameter(methodName: string, parameterIndex: number, dependency: string): void {
         const method = this.methods.get(methodName) || new Map<number, string>();
         method.set(parameterIndex, dependency);
         this.methods.set(methodName, method);
     }
 
-    public addProperty(propertyName: string, dependency: string) {
+    addProperty(propertyName: string, dependency: string): void {
         this.properties.set(propertyName, dependency);
     }
 }

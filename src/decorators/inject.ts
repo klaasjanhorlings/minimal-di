@@ -10,7 +10,7 @@ export const inject = (container?: IContainer) => (
     <TClass extends { new(...args: any[]): any }>(constructor: TClass) => (
         class extends constructor {
             // tslint:disable-next-line:no-any
-            public constructor(...ctorArgs: any[]) {
+            constructor(...ctorArgs: any[]) {
                 container = container || DefaultContainer.getInstance();
 
                 const metadata = DependencyMetadata.fromObject(constructor);
@@ -22,7 +22,7 @@ export const inject = (container?: IContainer) => (
                         } else {
                             // tslint:disable-next-line:ban-types
                             const method = constructor.prototype[methodName] as Function;
-                            const wrapper = function(this: TClass) {
+                            const wrapper = function(this: TClass): any {
                                 const methodArgs = Array.prototype.slice.call(arguments, 0);
                                 resolveDependencies(dependencies, methodArgs, container as IContainer);
                                 method.apply(this, methodArgs);
