@@ -8,5 +8,6 @@
         "test/**/*.js": { "when": "$(basename).ts" },
         "test/**/*.js.map": { "when": "$(basename)" }
     },
-    "editor.rulers": [100, 120]
+    "editor.rulers": [100, 120],
+    "tslint.autoFixOnSave": true
 }

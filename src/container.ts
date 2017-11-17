@@ -81,6 +81,7 @@ export class DefaultContainer implements IContainer {
 
         return instance;
     }
+
     private throwOnLoop(identifier: string) {
         const idx = this.initStack.indexOf(identifier);
         if (idx >= 0) {

@@ -11,6 +11,7 @@
         "no-import-side-effect": false,
         "only-arrow-functions": false,
         "no-magic-numbers": false,
-        "no-parameter-properties": false
+        "no-parameter-properties": false,
+        "no-empty": false
     }
 }
