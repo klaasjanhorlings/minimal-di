@@ -4,7 +4,7 @@ import { spy } from "sinon";
 import { DependencyMetadata } from "../src/dependency-metadata";
 import { DefaultContainer, dependency, inject, register } from "../src/index";
 
-/* tslint:disable:max-classes-per-file */
+/* tslint:disable:max-classes-per-file typedef */
 
 describe("Integration tests", function() {
     describe("Dependency chain", function() {
@@ -20,14 +20,14 @@ describe("Integration tests", function() {
             @register("DependencyA")
             @inject()
             class DependencyA {
-                public constructor(
+                constructor(
                     @dependency("RootDependency") public rootDependency?,
                 ) { }
             }
 
             @inject()
             class DependencyB {
-                public constructor(
+                constructor(
                     @dependency("DependencyA") public dependencyA?,
                 ) { }
             }
@@ -52,7 +52,7 @@ describe("Integration tests", function() {
             @register("DependencyA")
             @inject()
             class DependencyA {
-                public constructor(
+                constructor(
                     @dependency("DependencyB") public dependencyB?,
                 ) { }
             }
@@ -60,7 +60,7 @@ describe("Integration tests", function() {
             @register("DependencyB")
             @inject()
             class DependencyB {
-                public constructor(
+                constructor(
                     @dependency("DependencyC") public dependencyC?,
                 ) { }
             }
@@ -68,7 +68,7 @@ describe("Integration tests", function() {
             @register("DependencyC")
             @inject()
             class DependencyC {
-                public constructor(
+                constructor(
                     @dependency("DependencyA") public dependencyA?,
                 ) { }
             }
@@ -76,7 +76,7 @@ describe("Integration tests", function() {
             @register("Dependency")
             @inject()
             class Dependency {
-                public constructor(
+                constructor(
                     @dependency("DependencyA") public dependencyA?,
                 ) { }
             }

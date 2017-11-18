@@ -4,6 +4,8 @@ import { DefaultContainer } from "../../src/container";
 import { dependency } from "../../src/decorators/dependency";
 import { DependencyMetadata } from "../../src/dependency-metadata";
 
+// tslint:disable:no-unused-expression typedef
+
 describe("@dependency decorator", function() {
     describe("PropertyDecorator", function() {
         it("should create and store a new DependencyMetadata object when first encountered", function() {
@@ -15,7 +17,6 @@ describe("@dependency decorator", function() {
 
             // Assert
             const metadata = DependencyMetadata.fromObject(target);
-            // tslint:disable-next-line:no-unused-expression
             expect(metadata).
                 to.not.be.equal(undefined);
             expect(metadata.properties).

@@ -5,16 +5,16 @@ import { DefaultContainer } from "../../src/container";
 import { dependency } from "../../src/decorators/dependency";
 import { inject } from "../../src/decorators/inject";
 
-/* tslint:disable:max-classes-per-file */
+/* tslint:disable:max-classes-per-file typedef */
 
 class MockBase {
     // tslint:disable-next-line:no-any
-    public constructor(...args: any[]) {
+    constructor(...args: any[]) {
         watch.constructor.apply(this, arguments);
     }
 
     // tslint:disable-next-line:no-any
-    public testMethod(...args: any[]) {
+    testMethod(...args: any[]): string {
         watch.testMethod.apply(this, arguments);
 
         return "test";

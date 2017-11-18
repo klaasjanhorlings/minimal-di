@@ -3,6 +3,8 @@ import "mocha";
 import { spy } from "sinon";
 import { DefaultContainer } from "../src/container";
 
+// tslint:disable:no-unused-expression typedef
+
 describe("DefaultContainer", function() {
     beforeEach(function() {
         DefaultContainer.setInstance(undefined);

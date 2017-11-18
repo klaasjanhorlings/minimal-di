@@ -4,7 +4,7 @@ import { stub } from "sinon";
 import { DefaultContainer } from "../../src/container";
 import { register } from "../../src/decorators/register";
 
-/* tslint:disable:max-classes-per-file */
+/* tslint:disable:max-classes-per-file typedef */
 
 class MockContainer extends DefaultContainer {}
 const registerStub = stub(MockContainer.prototype, "registerConstructor");

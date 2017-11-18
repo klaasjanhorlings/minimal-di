@@ -2,6 +2,8 @@ import { expect } from "chai";
 import "mocha";
 import { DependencyMetadata } from "../src/dependency-metadata";
 
+// tslint:disable:no-unused-expression typedef
+
 describe("DependencyMetadata", function() {
     let metadata: DependencyMetadata;
     beforeEach(function() {
