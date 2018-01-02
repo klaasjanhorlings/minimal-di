@@ -4,7 +4,7 @@ import { DependencyMetadata } from "../dependency-metadata";
  * Adds a dependency reference to this property or method parameter.
  * @param dependency Name of the required dependency.
  */
-export const dependency = (dependencyName: string) => (
+export const dependency = (dependencyName: string, options?: Partial<DependencyOptions>) => (
     (target: object, propertyKey?: string, parameterIndex?: number) => {
         const metadata = DependencyMetadata.fromObject(target) || new DependencyMetadata();
 
@@ -22,3 +22,12 @@ export const dependency = (dependencyName: string) => (
         metadata.store(target);
     }
 );
+
+const mergeDefaultOptions: (options?: Partial<DependencyOptions>) => DependencyOptions = (options) => ({
+    required: true,
+    ...options,
+});
+
+export type DependencyOptions = {
+    required: boolean;
+};

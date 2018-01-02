@@ -35,6 +35,6 @@ class Example {
 ```
 
 ## To do
-- [ ] Add options object to register decorator, containing for example an isSingleton option
+- [x] Add options object to register decorator, containing for example an isSingleton option
 - [ ] Move object construction from inject decorator to seperate class, which DefaultContainer can reference too
-- [ ] Add options object to dependency decorator, containing for example an isNullable option
+- [x] Add options object to dependency decorator, containing for example an isNullable option

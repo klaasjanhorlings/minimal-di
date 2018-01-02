@@ -6,10 +6,26 @@ import { DefaultContainer, IContainer } from "../container";
  * @param container The container used to register this dependency on. Defaults to DefaultContainer.
  * @param isSingleton If true the same instance is object is returned every time. Defaults to false.
  */
-export const register = (identifier: string, container?: IContainer, isSingleton?: boolean) => (
+export const register = (identifier: string, options?: Partial<RegisterOptions>) => (
     // tslint:disable-next-line:ban-types
     (constructor: Function) => {
-        container = container || DefaultContainer.getInstance();
-        container.registerConstructor(identifier, constructor as FunctionConstructor, isSingleton);
+        const mergedOptions: RegisterOptions = {
+            ...mergeDefaultOptions(),
+            ...options,
+        };
+        mergedOptions.container.registerConstructor(identifier,
+                                                    constructor as FunctionConstructor,
+                                                    (mergedOptions.isSingleton));
     }
 );
+
+const mergeDefaultOptions: (options?: Partial<RegisterOptions>) => RegisterOptions = (options) => ({
+    container: DefaultContainer.getInstance(),
+    isSingleton: false,
+    ...options,
+});
+
+export type RegisterOptions = {
+    container: IContainer;
+    isSingleton: boolean;
+};

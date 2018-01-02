@@ -36,7 +36,7 @@ describe("@register decorator", function() {
         const container = new MockContainer();
 
         // Act
-        register("dependencyName", container)(Mock);
+        register("dependencyName", { container })(Mock);
 
         // Assert
         expect(registerStub.firstCall.thisValue).

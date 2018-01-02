@@ -1,6 +1,6 @@
 export interface IContainer {
     registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): void;
-    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean): void;
+    registerFactory<TDependency>(identifier: string, get: () => TDependency, isSingleton?: boolean): void;
     get<TDependency>(identifier: string): TDependency;
 }
 
@@ -49,6 +49,15 @@ export class DefaultContainer implements IContainer {
             identifier,
             isSingleton: !!isSingleton,
         });
+    }
+
+    clone(): IContainer {
+        const clone = new DefaultContainer();
+        this.definitions.forEach((definition, key) => {
+            clone.definitions.set(key, { ...definition });
+        });
+
+        return clone;
     }
 
     /**
