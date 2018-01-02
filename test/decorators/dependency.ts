@@ -24,6 +24,20 @@ describe("@dependency decorator", function() {
             expect(metadata.properties.get("propertyName")).
                 to.be.equal("dependencyName");
         });
+
+        it("should set passed options", function() {
+            // Arrange
+            const target = {};
+
+            // Act
+            dependency("dependencyName", { required: false })(target, "propertyName");
+
+            expect(true).to.be.false;
+        });
+
+        it("should set default options if none are passed", function() {
+            expect(true).to.be.false;
+        });
     });
 
     describe("ConstructorParameterDecorator", function() {

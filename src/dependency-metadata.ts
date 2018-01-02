@@ -28,3 +28,10 @@ export class DependencyMetadata {
         this.properties.set(propertyName, dependency);
     }
 }
+
+export type Dependency = {
+    name: string;
+    options: {
+        required: boolean;
+    };
+};
