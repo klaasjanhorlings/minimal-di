@@ -21,7 +21,7 @@ describe("@dependency decorator", function() {
                 to.not.be.equal(undefined);
             expect(metadata.properties).
                 to.have.key("propertyName");
-            expect(metadata.properties.get("propertyName")).
+            expect(metadata.properties.get("propertyName").name).
                 to.be.equal("dependencyName");
         });
 
@@ -30,13 +30,28 @@ describe("@dependency decorator", function() {
             const target = {};
 
             // Act
-            dependency("dependencyName", { required: false })(target, "propertyName");
+            dependency("required", { required: true })(target, "requiredProp");
+            dependency("notRequired", { required: false })(target, "notRequiredProp");
 
-            expect(true).to.be.false;
+            // Assert
+            const metadata = DependencyMetadata.fromObject(target);
+            expect(metadata.properties.get("requiredProp")).
+                to.be.deep.equal({ name: "required", options: { required: true } });
+            expect(metadata.properties.get("notRequiredProp")).
+                to.be.deep.equal({ name: "notRequired", options: { required: false } });
         });
 
         it("should set default options if none are passed", function() {
-            expect(true).to.be.false;
+            // Arrange
+            const target = {};
+
+            // Act
+            dependency("dependencyName")(target, "propertyName");
+
+            // Assert
+            const metadata = DependencyMetadata.fromObject(target);
+            expect(metadata.properties.get("propertyName")).
+                to.be.deep.equal({ name: "dependencyName", options: { required: true } });
         });
     });
 
@@ -54,7 +69,7 @@ describe("@dependency decorator", function() {
                 to.not.be.equal(undefined);
             expect(metadata.methods).
                 to.have.key("constructor");
-            expect(metadata.methods.get("constructor").get(0)).
+            expect(metadata.methods.get("constructor").get(0).name).
                 to.be.equal("dependencyName");
         });
 
@@ -68,9 +83,9 @@ describe("@dependency decorator", function() {
 
             // Assert
             const metadata = DependencyMetadata.fromObject(target);
-            expect(metadata.methods.get("constructor").get(0)).
+            expect(metadata.methods.get("constructor").get(0).name).
                 to.be.equal("dependencyName");
-            expect(metadata.methods.get("constructor").get(3)).
+            expect(metadata.methods.get("constructor").get(3).name).
                 to.be.equal("altDependency");
         });
     });
@@ -89,7 +104,7 @@ describe("@dependency decorator", function() {
                 to.not.be.equal(undefined);
             expect(metadata.methods).
                 to.have.key("methodName");
-            expect(metadata.methods.get("methodName").get(0)).
+            expect(metadata.methods.get("methodName").get(0).name).
                 to.be.equal("dependencyName");
         });
 
@@ -103,9 +118,9 @@ describe("@dependency decorator", function() {
 
             // Assert
             const metadata = DependencyMetadata.fromObject(target);
-            expect(metadata.methods.get("methodName").get(0)).
+            expect(metadata.methods.get("methodName").get(0).name).
                 to.be.equal("dependencyName");
-            expect(metadata.methods.get("methodName").get(3)).
+            expect(metadata.methods.get("methodName").get(3).name).
                 to.be.equal("altDependency");
         });
     });

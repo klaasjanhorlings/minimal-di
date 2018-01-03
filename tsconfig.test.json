@@ -6,6 +6,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "outDir": "./test/build",
-        "importHelpers": true
+        "importHelpers": true,
+        "sourceMap": true
     }
 }

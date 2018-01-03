@@ -1,5 +1,5 @@
 import { DefaultContainer, IContainer } from "../container";
-import { DependencyMetadata } from "../dependency-metadata";
+import { Dependency, DependencyMetadata } from "../dependency-metadata";
 
 /**
  * Notifies that the class has dependencies. Wraps the constructor in an automatically resolving wrapper.
@@ -12,7 +12,6 @@ export const inject = (options?: Partial<InjectOptions>) => (
             // tslint:disable-next-line:no-any
             constructor(...ctorArgs: any[]) {
                 const mergedOptions = mergeDefaultOptions(options);
-
                 const metadata = DependencyMetadata.fromObject(constructor);
 
                 if (typeof metadata !== "undefined") {
@@ -52,12 +51,12 @@ export type InjectOptions = {
 };
 
 const resolveDependencies = (
-        dependencies: Map<number | string, string>,
+        dependencies: Map<number | string, Dependency>,
         // tslint:disable-next-line:no-any
         dest: { [key: number]: any; [key: string]: any },
         container: IContainer,
     ) => {
     dependencies.forEach((dependencyRef, index) => {
-        dest[index] = (typeof dest[index] !== "undefined") ? dest[index] : container.get(dependencyRef);
+        dest[index] = (typeof dest[index] !== "undefined") ? dest[index] : container.get(dependencyRef.name);
     });
 };

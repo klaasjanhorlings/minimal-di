@@ -31,6 +31,13 @@ class DefaultContainer {
             isSingleton: !!isSingleton,
         });
     }
+    clone() {
+        const clone = new DefaultContainer();
+        this.definitions.forEach((definition, key) => {
+            clone.definitions.set(key, Object.assign({}, definition));
+        });
+        return clone;
+    }
     /**
      * Register a new object factory which returns a new object as requested.
      *

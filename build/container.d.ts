@@ -1,6 +1,6 @@
 export interface IContainer {
     registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): void;
-    registerFactory(identifier: string, get: () => {}, isSingleton?: boolean): void;
+    registerFactory<TDependency>(identifier: string, get: () => TDependency, isSingleton?: boolean): void;
     get<TDependency>(identifier: string): TDependency;
 }
 export declare class DefaultContainer implements IContainer {
@@ -20,6 +20,7 @@ export declare class DefaultContainer implements IContainer {
      * @param isSingleton Always return the same instance? Defaults to false.
      */
     registerConstructor(identifier: string, constructor: FunctionConstructor, isSingleton?: boolean): void;
+    clone(): IContainer;
     /**
      * Register a new object factory which returns a new object as requested.
      *

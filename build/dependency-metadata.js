@@ -13,16 +13,17 @@ class DependencyMetadata {
     store(target) {
         Reflect.defineMetadata(exports.metadataKey, this, target);
     }
-    addConstructorParameter(parameterIndex, dependency) {
-        this.addMethodParameter("constructor", parameterIndex, dependency);
+    addConstructorParameter(parameterIndex, dependency, options) {
+        this.addMethodParameter("constructor", parameterIndex, dependency, options);
     }
-    addMethodParameter(methodName, parameterIndex, dependency) {
+    // tslint:disable-next-line:max-line-length
+    addMethodParameter(methodName, parameterIndex, dependency, options) {
         const method = this.methods.get(methodName) || new Map();
-        method.set(parameterIndex, dependency);
+        method.set(parameterIndex, { name: dependency, options });
         this.methods.set(methodName, method);
     }
-    addProperty(propertyName, dependency) {
-        this.properties.set(propertyName, dependency);
+    addProperty(propertyName, dependency, options) {
+        this.properties.set(propertyName, { name: dependency, options });
     }
 }
 exports.DependencyMetadata = DependencyMetadata;
